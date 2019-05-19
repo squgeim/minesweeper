@@ -27,7 +27,7 @@ int main()
 
 int process_character(char ch, MinesweeperCtx *game) {
   if (ch == 'q') {
-    if (msw_quit() == 0)
+    if (msw_quit(game) == 0)
       return 0;
   }
 
