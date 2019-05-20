@@ -2,21 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../utils/array.h"
+
 #include "minesweeper.h"
 
 int random_number(int max) {
   return rand() % max;
-}
-
-int array_has_value(int *arr, int arr_size, int val) {
-  int i;
-  for (i = 0; i < arr_size; i++) {
-    if (arr[i] == val) {
-      return 1;
-    }
-  }
-
-  return 0;
 }
 
 void init_bomb_positions(int *bomb_positions, int total_bombs, int total_cells) {

@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#include "utils/array.h"
+
 #include "window.h"
 #include "libminesweeper/minesweeper.h"
 
