@@ -1,5 +1,5 @@
-#ifndef MINESWEEPER_H
-#define MINESWEEPER_H
+#ifndef __MINESWEEPER_H__
+#define __MINESWEEPER_H__
 
 typedef struct {
   int rows;
