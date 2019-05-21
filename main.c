@@ -7,9 +7,7 @@
 
 int process_character(char ch, MinesweeperCtx *game);
 
-int main(int argc, char **argv)
-{
-  int i, j;
+int main(int argc, char **argv) {
   int rows, cols;
   int cmd;
   MinesweeperCtx *game;
@@ -31,21 +29,7 @@ int main(int argc, char **argv)
     return -1;
   }
 
-  for (i = 0; i < rows; i++) {
-    for (j = 0; j < cols; j++) {
-      mvprintw(
-        i,
-        j,
-        "%s",
-        array_has_value(
-          game->bomb_positions,
-          game->bomb_count, i * rows + j
-        )
-          ? "+"
-          : "-"
-      );
-    }
-  }
+  window_draw_game(game);
 
   while((cmd = process_character(getch(), game)));
 
