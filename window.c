@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <ncurses.h>
 
 #include "window.h"
 #include "libminesweeper/minesweeper.h"
@@ -17,10 +18,10 @@ GameWindow* window_init(int rows, int cols) {
   refresh();
 
   local_win = newwin(
-      rows * 2,
-      cols * 2,
-      (LINES - rows * 2 - 2) / 2,
-      (COLS - cols * 2 - 2) / 2
+      rows + 2,
+      cols + 2,
+      (LINES - rows - 2) / 2,
+      (COLS - cols - 2) / 2
     );
   box(local_win, 0, 0);
 
@@ -43,5 +44,16 @@ int window_exit() {
 }
 
 int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
+  int i, j;
+
+  for (i = 0; i < game->rows; i++) {
+    for (j = 0; j < game->cols; j++) {
+      mvwaddch(window->window, i + 1, j + 1, ACS_BLOCK);
+    }
+  }
+
+  printw("%d %d", i, j);
+
+  wrefresh(window->window);
   return 0;
 }

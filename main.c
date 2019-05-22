@@ -9,7 +9,6 @@ int process_character(char ch, MinesweeperCtx *game);
 
 int main(int argc, char **argv) {
   int rows, cols;
-  int cmd;
   MinesweeperCtx *game;
   GameWindow *window;
 
@@ -32,7 +31,7 @@ int main(int argc, char **argv) {
   window = window_init(rows, cols);
   window_draw_game(window, game);
 
-  while((cmd = process_character(getch(), game)));
+  while(process_character(getch(), game));
 
   window_exit();
 
