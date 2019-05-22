@@ -4,8 +4,9 @@
 #include <ncurses.h>
 #include "libminesweeper/minesweeper.h"
 
-int window_init();
+WINDOW* window_init(int rows, int cols);
 int window_exit();
 int window_draw_game(MinesweeperCtx *game);
+int window_move_cursor(MinesweeperCtx *game, char direction);
 
 #endif
