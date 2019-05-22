@@ -4,9 +4,16 @@
 #include <ncurses.h>
 #include "libminesweeper/minesweeper.h"
 
-WINDOW* window_init(int rows, int cols);
+typedef struct {
+  WINDOW* window;
+  int cursor_position_x;
+  int cursor_position_y;
+} GameWindow;
+
+GameWindow* window_init(int rows, int cols);
 int window_exit();
-int window_draw_game(MinesweeperCtx *game);
-int window_move_cursor(MinesweeperCtx *game, char direction);
+
+int window_draw_game(GameWindow *window, MinesweeperCtx *game);
+int window_move_cursor(GameWindow *window, MinesweeperCtx *game, char direction);
 
 #endif

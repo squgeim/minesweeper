@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <ncurses.h>
 
 #include "utils/array.h"
 
@@ -12,10 +11,11 @@ int main(int argc, char **argv) {
   int rows, cols;
   int cmd;
   MinesweeperCtx *game;
-  WINDOW *window;
+  GameWindow *window;
 
   if (argc != 3) {
-    rows = cols = 16;
+    rows = 16;
+    cols = 32;
   } else {
     rows = atoi(argv[1]);
     cols = atoi(argv[2]);
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   }
 
   window = window_init(rows, cols);
-  /*window_draw_game(game);*/
+  window_draw_game(window, game);
 
   while((cmd = process_character(getch(), game)));
 
