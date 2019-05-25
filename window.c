@@ -89,6 +89,18 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
 int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y) {
   // TODO: Check invalid cell
 
+  if (cell_x > game->cols - 1) {
+    cell_x = 0;
+  } else if (cell_x < 0) {
+    cell_x = game->cols - 1;
+  }
+
+  if (cell_y > game->rows - 1) {
+    cell_y = 0;
+  } else if (cell_y < 0) {
+    cell_y = game->rows - 1;
+  }
+
   int x = cell_x * 2 + 1;
   int y = cell_y * 2 + 1;
 
