@@ -73,7 +73,7 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
   for (i = 1, cell_i = 0; i < game->rows * 2; i++) {
     for (j = 1, cell_j = 0; j < game->cols * 2; j++) {
       if (!is_even(i)) {
-        mvwaddch(window->window, i, j, is_even(j) ? (cell_j++, ACS_VLINE) : ACS_BLOCK);
+        mvwaddch(window->window, i, j, is_even(j) ? (cell_j++, ACS_VLINE) : ACS_CKBOARD);
       } else {
         mvwaddch(window->window, i, j, is_even(j) ? ACS_PLUS : ACS_HLINE);
       }
