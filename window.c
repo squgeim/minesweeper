@@ -27,8 +27,8 @@ GameWindow* window_init(int rows, int cols) {
 
   win = (GameWindow*) malloc(sizeof(GameWindow));
 
-  win->cursor_position_x = 0;
-  win->cursor_position_y = 0;
+  win->cursor_position_x = 1;
+  win->cursor_position_y = 1;
   win->window = local_win;
 
   return win;
@@ -80,8 +80,36 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
     cell_i++;
   }
 
-  wmove(window->window, 1, 1);
+  window_select_cell(window, game, 0, 0);
 
   wrefresh(window->window);
   return 0;
+}
+
+int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y) {
+  // TODO: Check invalid cell
+
+  int x = cell_x * 2 + 1;
+  int y = cell_y * 2 + 1;
+
+  window->cursor_position_x = cell_x;
+  window->cursor_position_y = cell_y;
+
+  wmove(window->window, y, x);
+  return wrefresh(window->window);
+}
+
+int window_move_cursor(GameWindow *window, MinesweeperCtx *game, int ch) {
+  switch (ch) {
+    case KEY_UP:
+      return window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y - 1);
+    case KEY_DOWN:
+      return window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y + 1);
+    case KEY_LEFT:
+      return window_select_cell(window, game, window->cursor_position_x - 1, window->cursor_position_y);
+    case KEY_RIGHT:
+      return window_select_cell(window, game, window->cursor_position_x + 1, window->cursor_position_y);
+    default:
+      return -1;
+  }
 }

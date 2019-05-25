@@ -14,6 +14,7 @@ GameWindow* window_init(int rows, int cols);
 int window_exit();
 
 int window_draw_game(GameWindow *window, MinesweeperCtx *game);
-int window_move_cursor(GameWindow *window, MinesweeperCtx *game, char direction);
+int window_move_cursor(GameWindow *window, MinesweeperCtx *game, int direction);
+int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y);
 
 #endif
