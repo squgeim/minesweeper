@@ -9,7 +9,6 @@ GameWindow* window_init(int rows, int cols) {
   WINDOW *local_win;
 
   initscr();
-  curs_set(0);
   raw();
   cbreak();
   noecho();
@@ -81,7 +80,8 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
     cell_i++;
   }
 
+  wmove(window->window, 1, 1);
+
   wrefresh(window->window);
-  refresh();
   return 0;
 }
