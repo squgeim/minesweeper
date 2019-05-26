@@ -43,6 +43,10 @@ int window_exit() {
   return 0;
 }
 
+int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
+  return ACS_CKBOARD;
+}
+
 int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
   int i, j, cell_i, cell_j;
 
@@ -69,11 +73,19 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
   // Draw cells and grid:
   for (i = 1, cell_i = 0; i < game->rows * 2; i++) {
     for (j = 1, cell_j = 0; j < game->cols * 2; j++) {
-      if (!IS_EVEN(i)) {
-        mvwaddch(window->window, i, j, IS_EVEN(j) ? (cell_j++, ACS_VLINE) : ACS_CKBOARD);
-      } else {
+      if (IS_EVEN(i)) {
         mvwaddch(window->window, i, j, IS_EVEN(j) ? ACS_PLUS : ACS_HLINE);
+
+        continue;
       }
+
+      if (IS_EVEN(j)) {
+        mvwaddch(window->window, i, j, ACS_VLINE);
+
+        continue;
+      }
+
+      mvwaddch(window->window, i, j, get_value_for_cell(game, cell_i, cell_j++));
     }
     cell_i++;
   }
