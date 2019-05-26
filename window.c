@@ -52,7 +52,7 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
 
   if (!cell->is_revealed) {
     if (cell->is_flagged) {
-      return ACS_UARROW;
+      return '#';
     }
 
     return ACS_CKBOARD;
