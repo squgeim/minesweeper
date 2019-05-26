@@ -30,15 +30,7 @@ void init_bomb_positions(int *bomb_positions, int total_bombs, int total_cells) 
 
 int init_cells(MinesweeperCtx *game, int *bomb_positions) {
   int i, j, k;
-  MinesweeperCell *cell, **cells;
-
-  cells = (MinesweeperCell**) malloc(
-      sizeof(MinesweeperCell*) * (game->rows * game->cols)
-    );
-
-  if (!cells) {
-    return -1;
-  }
+  MinesweeperCell *cell;
 
   for (i = 0, k = 0; i < game->rows; i++) {
     for (j = 0; j < game->cols; j++) {
@@ -58,11 +50,9 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
       cell->x = j;
       cell->y = i;
 
-      cells[k++] = cell;
+      game->cells[k++] = cell;
     }
   }
-
-  game->cells = cells;
 
   return 0;
 }

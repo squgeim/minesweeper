@@ -44,7 +44,15 @@ int window_exit() {
 }
 
 int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
-  return ACS_CKBOARD;
+  MinesweeperCell *cell;
+
+  cell = game->cells[y * game->rows + x];
+
+  if (!cell->is_revealed) {
+    return ACS_CKBOARD;
+  }
+
+  return ' ';
 }
 
 int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
