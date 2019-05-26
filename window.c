@@ -31,8 +31,8 @@ GameWindow* window_init(int rows, int cols) {
 
   win = (GameWindow*) malloc(sizeof(GameWindow));
 
-  win->cursor_position_x = 1;
-  win->cursor_position_y = 1;
+  win->cursor_position_x = 0;
+  win->cursor_position_y = 0;
   win->window = local_win;
 
   return win;
@@ -112,7 +112,7 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
     cell_i++;
   }
 
-  window_select_cell(window, game, 0, 0);
+  window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y);
 
   wrefresh(window->window);
   return 0;
