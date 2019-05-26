@@ -14,9 +14,11 @@ int main(int argc, char **argv) {
   GameWindow *window;
 
   if (argc != 3) {
+    // TODO: take all the space available
     rows = 16;
     cols = 32;
   } else {
+    // TODO: Limit by available screen space
     rows = atoi(argv[1]);
     cols = atoi(argv[2]);
   }

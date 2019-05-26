@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <ncurses.h>
 
+#include "utils/number.h"
+
 #include "window.h"
 #include "libminesweeper/minesweeper.h"
 
@@ -41,40 +43,36 @@ int window_exit() {
   return 0;
 }
 
-int is_even(int num) {
-  return num % 2 == 0;
-}
-
 int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
   int i, j, cell_i, cell_j;
 
   // Draw top row border:
   mvwaddch(window->window, 0, 0, ACS_ULCORNER);
   for (j = 1; j < game->cols * 2; j++) {
-    mvwaddch(window->window, 0, j, is_even(j) ? ACS_TTEE : ACS_HLINE);
+    mvwaddch(window->window, 0, j, IS_EVEN(j) ? ACS_TTEE : ACS_HLINE);
   }
   mvwaddch(window->window, 0, j, ACS_URCORNER);
 
   // Draw bottom row border:
   mvwaddch(window->window, game->rows * 2, 0, ACS_LLCORNER);
   for (j = 1; j < game->cols * 2; j++) {
-    mvwaddch(window->window, game->rows * 2, j, is_even(j) ? ACS_BTEE : ACS_HLINE);
+    mvwaddch(window->window, game->rows * 2, j, IS_EVEN(j) ? ACS_BTEE : ACS_HLINE);
   }
   mvwaddch(window->window, game->rows * 2, j, ACS_LRCORNER);
 
   // Draw side borders:
   for (i = 1; i < game->rows * 2; i++) {
-    mvwaddch(window->window, i, 0, is_even(i) ? ACS_LTEE: ACS_VLINE);
-    mvwaddch(window->window, i, game->cols * 2, is_even(i) ? ACS_RTEE: ACS_VLINE);
+    mvwaddch(window->window, i, 0, IS_EVEN(i) ? ACS_LTEE: ACS_VLINE);
+    mvwaddch(window->window, i, game->cols * 2, IS_EVEN(i) ? ACS_RTEE: ACS_VLINE);
   }
 
   // Draw cells and grid:
   for (i = 1, cell_i = 0; i < game->rows * 2; i++) {
     for (j = 1, cell_j = 0; j < game->cols * 2; j++) {
-      if (!is_even(i)) {
-        mvwaddch(window->window, i, j, is_even(j) ? (cell_j++, ACS_VLINE) : ACS_CKBOARD);
+      if (!IS_EVEN(i)) {
+        mvwaddch(window->window, i, j, IS_EVEN(j) ? (cell_j++, ACS_VLINE) : ACS_CKBOARD);
       } else {
-        mvwaddch(window->window, i, j, is_even(j) ? ACS_PLUS : ACS_HLINE);
+        mvwaddch(window->window, i, j, IS_EVEN(j) ? ACS_PLUS : ACS_HLINE);
       }
     }
     cell_i++;
