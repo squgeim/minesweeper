@@ -28,6 +28,45 @@ void init_bomb_positions(int *bomb_positions, int total_bombs, int total_cells) 
   }
 }
 
+int init_cells(MinesweeperCtx *game, int *bomb_positions) {
+  int i, j, k;
+  MinesweeperCell *cell, **cells;
+
+  cells = (MinesweeperCell**) malloc(
+      sizeof(MinesweeperCell*) * (game->rows * game->cols)
+    );
+
+  if (!cells) {
+    return -1;
+  }
+
+  for (i = 0, k = 0; i < game->rows; i++) {
+    for (j = 0; j < game->cols; j++) {
+      cell = (MinesweeperCell *) malloc(sizeof(MinesweeperCell));
+
+      if (!cell) {
+        return -1;
+      }
+
+      cell->is_bomb = (bool) array_has_value(
+          bomb_positions,
+          game->bomb_count,
+          (i * game->rows) + j
+        );
+      cell->is_revealed = false;
+      cell->is_flagged = false;
+      cell->x = j;
+      cell->y = i;
+
+      cells[k++] = cell;
+    }
+  }
+
+  game->cells = cells;
+
+  return 0;
+}
+
 MinesweeperCtx* msw_init(int rows, int cols) {
   int total_cells, total_bombs;
 
@@ -37,9 +76,10 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   total_bombs = 15000 / total_cells; // 15% of the cells have a bomb
 
   int *bomb_positions = (int*) malloc(sizeof(int) * total_bombs);
-  int *flag_positions = (int*) malloc(sizeof(int) * total_cells);
+  MinesweeperCell **cells =
+    (MinesweeperCell**) malloc((sizeof(MinesweeperCell) * total_cells));
 
-  if (!game || !bomb_positions || !flag_positions) {
+  if (!game || !bomb_positions || !cells) {
     fprintf(stderr, "There was an error trying to initialize Minesweeper. Maybe\
         you have run out of memory?");
 
@@ -51,15 +91,15 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   game->rows = rows;
   game->cols = cols;
   game->bomb_count = total_bombs;
-  game->bomb_positions = bomb_positions;
-  game->flag_positions = flag_positions;
+  game->cells = cells;
+
+  init_cells(game, bomb_positions);
 
   return game;
 }
 
 int msw_quit(MinesweeperCtx *game) {
-  free(game->bomb_positions);
-  free(game->flag_positions);
+  free(game->cells);
   free(game);
 
   return 0;
