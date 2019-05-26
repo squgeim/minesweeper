@@ -192,11 +192,14 @@ int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
 
 int window_flag_current_cell(GameWindow *window, MinesweeperCtx *game) {
   int x, y;
+  MinesweeperCell *cell;
 
   x = window->cursor_position_x;
   y = window->cursor_position_y;
 
-  game->cells[y * game->cols + x]->is_flagged = true;
+  cell = game->cells[y * game->cols + x];
+
+  cell->is_flagged = !cell->is_flagged;
 
   return window_draw_game(window, game);
 }
