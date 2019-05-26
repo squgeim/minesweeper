@@ -53,6 +53,16 @@ int process_character(int ch, GameWindow *window, MinesweeperCtx *game) {
     case KEY_UP:
     case KEY_DOWN:
       window_move_cursor(window, game, ch);
+
+      break;
+    case 10: // Enter key
+      window_reveal_current_cell(window, game);
+
+      break;
+    case ' ':
+      window_flag_current_cell(window, game);
+
+      break;
   }
 
   return 1;

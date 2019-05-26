@@ -15,6 +15,7 @@ int window_exit();
 
 int window_draw_game(GameWindow *window, MinesweeperCtx *game);
 int window_move_cursor(GameWindow *window, MinesweeperCtx *game, int direction);
-int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y);
+int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game);
+int window_flag_current_cell(GameWindow *window, MinesweeperCtx *game);
 
 #endif

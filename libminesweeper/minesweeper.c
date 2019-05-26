@@ -43,7 +43,7 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
       cell->is_bomb = (bool) array_has_value(
           bomb_positions,
           game->bomb_count,
-          (i * game->rows) + j
+          (i * game->cols) + j
         );
       cell->is_revealed = false;
       cell->is_flagged = false;

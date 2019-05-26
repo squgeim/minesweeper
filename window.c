@@ -6,6 +6,8 @@
 #include "window.h"
 #include "libminesweeper/minesweeper.h"
 
+int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y);
+
 GameWindow* window_init(int rows, int cols) {
   GameWindow *win;
   WINDOW *local_win;
@@ -49,7 +51,19 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
   cell = game->cells[y * game->rows + x];
 
   if (!cell->is_revealed) {
+    if (cell->is_flagged) {
+      return ACS_UARROW;
+    }
+
     return ACS_CKBOARD;
+  }
+
+  if (cell->is_bomb) {
+    return ACS_DIAMOND;
+  }
+
+  if (cell->bombs_count > 0) {
+    return cell->bombs_count;
   }
 
   return ' ';
@@ -126,20 +140,63 @@ int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int
   window->cursor_position_y = cell_y;
 
   wmove(window->window, y, x);
+
   return wrefresh(window->window);
 }
 
 int window_move_cursor(GameWindow *window, MinesweeperCtx *game, int ch) {
   switch (ch) {
     case KEY_UP:
-      return window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y - 1);
+      return window_select_cell(
+          window,
+          game,
+          window->cursor_position_x,
+          window->cursor_position_y - 1
+        );
     case KEY_DOWN:
-      return window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y + 1);
+      return window_select_cell(
+          window,
+          game,
+          window->cursor_position_x,
+          window->cursor_position_y + 1
+        );
     case KEY_LEFT:
-      return window_select_cell(window, game, window->cursor_position_x - 1, window->cursor_position_y);
+      return window_select_cell(
+          window,
+          game,
+          window->cursor_position_x - 1,
+          window->cursor_position_y
+        );
     case KEY_RIGHT:
-      return window_select_cell(window, game, window->cursor_position_x + 1, window->cursor_position_y);
+      return window_select_cell(
+          window,
+          game,
+          window->cursor_position_x + 1,
+          window->cursor_position_y
+        );
     default:
       return -1;
   }
+}
+
+int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
+  int x, y;
+
+  x = window->cursor_position_x;
+  y = window->cursor_position_y;
+
+  game->cells[y * game->cols + x]->is_revealed = true;
+
+  return window_draw_game(window, game);
+}
+
+int window_flag_current_cell(GameWindow *window, MinesweeperCtx *game) {
+  int x, y;
+
+  x = window->cursor_position_x;
+  y = window->cursor_position_y;
+
+  game->cells[y * game->cols + x]->is_flagged = true;
+
+  return window_draw_game(window, game);
 }
