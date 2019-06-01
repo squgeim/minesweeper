@@ -71,7 +71,7 @@ MinesweeperCtx* msw_init(int rows, int cols) {
 
   if (!game || !bomb_positions || !cells) {
     fprintf(stderr, "There was an error trying to initialize Minesweeper. Maybe\
-        you have run out of memory?");
+ you have run out of memory?");
 
     return NULL;
   }
