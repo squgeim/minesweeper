@@ -20,6 +20,16 @@ typedef struct {
 } MinesweeperCtx;
 
 MinesweeperCtx* msw_init(int rows, int cols);
+
+/**
+ * CELL FUNCTIONS
+ */
+int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell);
+int cell_flag(MinesweeperCtx *game, MinesweeperCell *cell);
+/**
+ * CELL FUNCTIONS END
+ */
+
 int msw_quit();
 
 #endif
