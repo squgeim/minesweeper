@@ -109,7 +109,10 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
 
       mvwaddch(window->window, i, j, get_value_for_cell(game, cell_i, cell_j++));
     }
-    cell_i++;
+
+    if (!IS_EVEN(i) && !IS_EVEN(j)) {
+      cell_i++;
+    }
   }
 
   window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y);
