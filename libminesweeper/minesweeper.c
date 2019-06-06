@@ -33,71 +33,62 @@ void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
   MinesweeperCell *cell;
 
   for (i = 0; i < game->bomb_count; i++) {
-    cell = game->cells[bomb_positions[i]];
+    cell = game
+      ->cells
+          [POSITION_Y_FOR_INDEX(game->cols, bomb_positions[i])]
+          [POSITION_X_FOR_INDEX(game->cols, bomb_positions[i])];
 
     // Left
     if (cell->x > 0) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x - 1, cell->y)]
-        ->bombs_count++;
+      game->cells[cell->y][cell->x - 1]->bombs_count++;
     }
 
     // Right
-    if (cell->x < game->cols) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x + 1, cell->y)]
-        ->bombs_count++;
+    if (cell->x < (game->cols - 1)) {
+      game->cells[cell->y][cell->x + 1]->bombs_count++;
     }
 
     // Up
     if (cell->y > 0) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x, cell->y - 1)]
-        ->bombs_count++;
+      game->cells[cell->y - 1][cell->x]->bombs_count++;
     }
 
     // Down
-    if (cell->y < game->rows) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x, cell->y + 1)]
-        ->bombs_count++;
+    if (cell->y < (game->rows - 1)) {
+      game->cells[cell->y + 1][cell->x]->bombs_count++;
     }
 
     // Left Up
     if (cell->x > 0 && cell->y > 0) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x - 1, cell->y - 1)]
-        ->bombs_count++;
+      game->cells[cell->y - 1][cell->x - 1]->bombs_count++;
     }
 
     // Right Up
-    if (cell->x < game->cols && cell->y > 0) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x + 1, cell->y - 1)]
-        ->bombs_count++;
+    if (cell->x < (game->cols - 1) && cell->y > 0) {
+      game->cells[cell->y - 1][cell->x + 1]->bombs_count++;
     }
 
     // Left down
-    if (cell->x < game->rows && cell->y > 0) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x - 1, cell->y + 1)]
-        ->bombs_count++;
+    if (cell->x > 0 && cell->y < (game->rows - 1)) {
+      game->cells[cell->y + 1][cell->x - 1]->bombs_count++;
     }
 
     // Right down
-    if (cell->x < game->rows && cell->y < game->cols) {
-      game
-        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x + 1, cell->y + 1)]
-        ->bombs_count++;
+    if (cell->x < (game->cols - 1) && cell->y < (game->rows - 1)) {
+      game->cells[cell->y + 1][cell->x + 1]->bombs_count++;
     }
   }
 }
 
 int init_cells(MinesweeperCtx *game, int *bomb_positions) {
   int i, j, k;
-  MinesweeperCell *cell;
+  MinesweeperCell *cell, **cell_row;
 
   for (i = 0, k = 0; i < game->rows; i++) {
+    cell_row =
+      (MinesweeperCell **) malloc(sizeof(MinesweeperCell*) * game->cols);
+    game->cells[i] = cell_row;
+
     for (j = 0; j < game->cols; j++) {
       cell = (MinesweeperCell *) malloc(sizeof(MinesweeperCell));
 
@@ -116,7 +107,7 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
       cell->x = j;
       cell->y = i;
 
-      game->cells[k++] = cell;
+      game->cells[i][j] = cell;
     }
   }
 
@@ -127,6 +118,7 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
 
 MinesweeperCtx* msw_init(int rows, int cols) {
   int total_cells, total_bombs;
+  MinesweeperCell ***cells;
 
   MinesweeperCtx *game = (MinesweeperCtx*) malloc(sizeof(MinesweeperCtx));
 
@@ -134,8 +126,7 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   total_bombs = 40000 / total_cells; // 40% of the cells have a bomb
 
   int *bomb_positions = (int*) malloc(sizeof(int) * total_bombs);
-  MinesweeperCell **cells =
-    (MinesweeperCell**) malloc((sizeof(MinesweeperCell) * total_cells));
+  cells = (MinesweeperCell***) malloc((sizeof(MinesweeperCell **) * rows));
 
   if (!game || !bomb_positions || !cells) {
     fprintf(stderr, "There was an error trying to initialize Minesweeper. Maybe\

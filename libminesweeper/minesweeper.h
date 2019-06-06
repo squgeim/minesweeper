@@ -20,7 +20,7 @@ typedef struct {
   int rows;
   int cols;
   int bomb_count;
-  MinesweeperCell **cells;
+  MinesweeperCell ***cells;
 } MinesweeperCtx;
 
 MinesweeperCtx* msw_init(int rows, int cols);

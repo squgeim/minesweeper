@@ -48,7 +48,7 @@ int window_exit() {
 int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
   MinesweeperCell *cell;
 
-  cell = game->cells[y * game->rows + x];
+  cell = game->cells[y][x];
 
   /*if (!cell->is_revealed) {*/
     /*if (cell->is_flagged) {*/
@@ -186,7 +186,7 @@ int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
   x = window->cursor_position_x;
   y = window->cursor_position_y;
 
-  cell = game->cells[y * game->cols + x];
+  cell = game->cells[y][x];
 
   cell_reveal(game, cell, false);
 
@@ -200,7 +200,7 @@ int window_flag_current_cell(GameWindow *window, MinesweeperCtx *game) {
   x = window->cursor_position_x;
   y = window->cursor_position_y;
 
-  cell = game->cells[y * game->cols + x];
+  cell = game->cells[y][x];
 
   cell_flag(game, cell);
 
