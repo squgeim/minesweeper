@@ -188,7 +188,7 @@ int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
 
   cell = game->cells[y * game->cols + x];
 
-  cell_reveal(game, cell);
+  cell_reveal(game, cell, false);
 
   return window_draw_game(window, game);
 }
