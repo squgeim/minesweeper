@@ -28,6 +28,71 @@ void init_bomb_positions(int *bomb_positions, int total_bombs, int total_cells) 
   }
 }
 
+void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
+  int i;
+  MinesweeperCell *cell;
+
+  for (i = 0; i < game->bomb_count; i++) {
+    cell = game->cells[bomb_positions[i]];
+
+    // Left
+    if (cell->x > 0) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x - 1, cell->y)]
+        ->bombs_count++;
+    }
+
+    // Right
+    if (cell->x < game->cols) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x + 1, cell->y)]
+        ->bombs_count++;
+    }
+
+    // Up
+    if (cell->y > 0) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x, cell->y - 1)]
+        ->bombs_count++;
+    }
+
+    // Down
+    if (cell->y < game->rows) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x, cell->y + 1)]
+        ->bombs_count++;
+    }
+
+    // Left Up
+    if (cell->x > 0 && cell->y > 0) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x - 1, cell->y - 1)]
+        ->bombs_count++;
+    }
+
+    // Right Up
+    if (cell->x < game->cols && cell->y > 0) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x + 1, cell->y - 1)]
+        ->bombs_count++;
+    }
+
+    // Left down
+    if (cell->x < game->rows && cell->y > 0) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x - 1, cell->y + 1)]
+        ->bombs_count++;
+    }
+
+    // Right down
+    if (cell->x < game->rows && cell->y < game->cols) {
+      game
+        ->cells[INDEX_FOR_CELL(game->rows, game->cols, cell->x + 1, cell->y + 1)]
+        ->bombs_count++;
+    }
+  }
+}
+
 int init_cells(MinesweeperCtx *game, int *bomb_positions) {
   int i, j, k;
   MinesweeperCell *cell;
@@ -45,6 +110,7 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
           game->bomb_count,
           (i * game->cols) + j
         );
+      cell->bombs_count = 0;
       cell->is_revealed = false;
       cell->is_flagged = false;
       cell->x = j;
@@ -53,6 +119,8 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
       game->cells[k++] = cell;
     }
   }
+
+  init_bomb_counts(game, bomb_positions);
 
   return 0;
 }

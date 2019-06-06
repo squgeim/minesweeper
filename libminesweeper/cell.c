@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #include "minesweeper.h"
 
 int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell) {

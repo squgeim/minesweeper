@@ -50,20 +50,20 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
 
   cell = game->cells[y * game->rows + x];
 
-  if (!cell->is_revealed) {
-    if (cell->is_flagged) {
-      return '#';
-    }
+  /*if (!cell->is_revealed) {*/
+    /*if (cell->is_flagged) {*/
+      /*return '#';*/
+    /*}*/
 
-    return ACS_CKBOARD;
-  }
+    /*return ACS_CKBOARD;*/
+  /*}*/
 
   if (cell->is_bomb) {
     return ACS_DIAMOND;
   }
 
   if (cell->bombs_count > 0) {
-    return cell->bombs_count;
+    return cell->bombs_count + 48; // Converting to ASCII
   }
 
   return ' ';

@@ -3,6 +3,10 @@
 
 #include <stdbool.h>
 
+#define INDEX_FOR_CELL(rows, cols, x, y) (cols * y + x)
+#define POSITION_X_FOR_INDEX(cols, index) (index % cols)
+#define POSITION_Y_FOR_INDEX(cols, index) (index / cols)
+
 typedef struct {
   int x;
   int y;
