@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
+#include <syslog.h>
+#include <stdarg.h>
 
 #include "utils/array.h"
 
@@ -13,6 +15,8 @@ int main(int argc, char **argv) {
   MinesweeperCtx *game;
   GameWindow *window;
 
+  openlog("minesweeper", (LOG_CONS | LOG_PERROR | LOG_PID), LOG_USER);
+
   if (argc != 3) {
     // TODO: take all the space available
     rows = 16;
@@ -23,9 +27,13 @@ int main(int argc, char **argv) {
     cols = atoi(argv[2]);
   }
 
+  syslog(LOG_INFO, "Initializing game with size: %dx%d", cols, rows);
+
   game = msw_init(rows, cols);
 
   if (!game) {
+    syslog(LOG_ERR, "Could not initialize game, most probably due to lack of \
+memory.");
     fprintf(stderr, "Could not initialize game.");
 
     return -1;
@@ -36,7 +44,11 @@ int main(int argc, char **argv) {
 
   while(process_character(getch(), window, game));
 
+  syslog(LOG_INFO, "Exiting because the user asked to.");
+
   window_exit();
+
+  closelog();
 
   return 0;
 }
