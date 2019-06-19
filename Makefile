@@ -1,6 +1,6 @@
 CC=gcc
 LFLAGS=-lncurses
-CFLAGS=
+CFLAGS=-g -Wall
 OBJ = window.o libminesweeper/minesweeper.o libminesweeper/cell.o utils/array.o
 
 build: $(OBJ)
@@ -8,3 +8,6 @@ build: $(OBJ)
 
 %.o : %.c
 	$(CC) -c $(CFLAGS) $< -o $@
+
+clean:
+	rm ./**/*.o
