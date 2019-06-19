@@ -1,6 +1,8 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <syslog.h>
+#include <stdarg.h>
 
 #include "../utils/array.h"
 
@@ -101,6 +103,7 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
           game->bomb_count,
           (i * game->cols) + j
         );
+
       cell->bombs_count = 0;
       cell->is_revealed = false;
       cell->is_flagged = false;
@@ -120,10 +123,14 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   int total_cells, total_bombs;
   MinesweeperCell ***cells;
 
+  syslog(LOG_INFO, "Initializing game with size: %dx%d", cols, rows);
+
   MinesweeperCtx *game = (MinesweeperCtx*) malloc(sizeof(MinesweeperCtx));
 
   total_cells = rows * cols;
-  total_bombs = (int) (0.4 * total_cells); // 40% of the cells have a bomb
+  total_bombs = (int) (0.2 * total_cells); // 20% of the cells have a bomb
+
+  syslog(LOG_INFO, "Total bombs: %d", total_bombs);
 
   int *bomb_positions = (int*) malloc(sizeof(int) * total_bombs);
   cells = (MinesweeperCell***) malloc((sizeof(MinesweeperCell **) * rows));

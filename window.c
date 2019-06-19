@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
+#include <syslog.h>
+#include <stdarg.h>
 
 #include "utils/number.h"
 
@@ -50,13 +52,13 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
 
   cell = game->cells[y][x];
 
-  /*if (!cell->is_revealed) {*/
-    /*if (cell->is_flagged) {*/
-      /*return '#';*/
-    /*}*/
+  if (!cell->is_revealed) {
+    if (cell->is_flagged) {
+      return '#';
+    }
 
-    /*return ACS_CKBOARD;*/
-  /*}*/
+    return ACS_CKBOARD;
+  }
 
   if (cell->is_bomb) {
     return ACS_DIAMOND;
@@ -110,7 +112,7 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
       mvwaddch(window->window, i, j, get_value_for_cell(game, cell_i, cell_j++));
     }
 
-    if (!IS_EVEN(i) && !IS_EVEN(j)) {
+    if (!IS_EVEN(i)) {
       cell_i++;
     }
   }
