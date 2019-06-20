@@ -45,6 +45,8 @@ void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
           [POSITION_Y_FOR_INDEX(game->cols, bomb_positions[i])]
           [POSITION_X_FOR_INDEX(game->cols, bomb_positions[i])];
 
+    cell->is_bomb = true;
+
     // Left
     if (cell->x > 0) {
       game->cells[cell->y][cell->x - 1]->bombs_count++;
@@ -87,7 +89,7 @@ void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
   }
 }
 
-int init_cells(MinesweeperCtx *game, int *bomb_positions) {
+int init_cells(MinesweeperCtx *game) {
   int i, j, k, index;
   MinesweeperCell *cell, **cell_row;
 
@@ -105,12 +107,7 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
 
       index = (i * game->cols) + j;
 
-      cell->is_bomb = (bool) array_has_value(
-          bomb_positions,
-          game->bomb_count,
-          index
-        );
-
+      cell->is_bomb = false;
       cell->bombs_count = 0;
       cell->is_revealed = false;
       cell->is_flagged = false;
@@ -121,8 +118,6 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
       game->cells[i][j] = cell;
     }
   }
-
-  init_bomb_counts(game, bomb_positions);
 
   return 0;
 }
@@ -155,10 +150,12 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   game->is_bombs_initialized = false;
   game->cells = cells;
 
+  init_cells(game);
+
   return game;
 }
 
-int msw_init_bomb_positions(MinesweeperCtx *game, int first_cell_index) {
+int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell) {
   int *bomb_positions, total_cells;
 
   bomb_positions = (int*) malloc(sizeof(int) * game->bomb_count);
@@ -174,12 +171,14 @@ int msw_init_bomb_positions(MinesweeperCtx *game, int first_cell_index) {
     bomb_positions,
     game->bomb_count,
     total_cells,
-    first_cell_index
+    first_cell->index
   );
+
+  init_bomb_counts(game, bomb_positions);
 
   game->is_bombs_initialized = true;
 
-  return init_cells(game, bomb_positions);
+  return 0;
 }
 
 int msw_quit(MinesweeperCtx *game) {

@@ -197,10 +197,6 @@ int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
 
   cell_index = y * game->cols + x;
 
-  if (!game->is_bombs_initialized) {
-    msw_init_bomb_positions(game, cell_index);
-  }
-
   cell = game->cells[y][x];
 
   cell_reveal(game, cell);

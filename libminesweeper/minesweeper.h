@@ -26,7 +26,7 @@ typedef struct {
 } MinesweeperCtx;
 
 MinesweeperCtx* msw_init(int rows, int cols);
-int msw_init_bomb_positions(MinesweeperCtx *game, int first_cell_index);
+int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell);
 
 /**
  * CELL FUNCTIONS

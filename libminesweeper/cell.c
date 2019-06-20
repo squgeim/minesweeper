@@ -57,6 +57,10 @@ void get_surrounding_cells(
 int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell) {
   MinesweeperCell *surrounding_cells[8];
 
+  if (!game->is_bombs_initialized) {
+    msw_init_bomb_positions(game, cell);
+  }
+
   if (cell->is_bomb) {
     // explod()
     return 0;
