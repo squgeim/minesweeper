@@ -28,7 +28,7 @@ MinesweeperCtx* msw_init(int rows, int cols);
 /**
  * CELL FUNCTIONS
  */
-int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell, bool is_automatic);
+int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell);
 int cell_flag(MinesweeperCtx *game, MinesweeperCell *cell);
 /**
  * CELL FUNCTIONS END
