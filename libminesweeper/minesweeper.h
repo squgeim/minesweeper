@@ -10,6 +10,7 @@
 typedef struct {
   int x;
   int y;
+  int index;
   int bombs_count;
   bool is_bomb;
   bool is_revealed;
@@ -20,10 +21,12 @@ typedef struct {
   int rows;
   int cols;
   int bomb_count;
+  bool is_bombs_initialized;
   MinesweeperCell ***cells;
 } MinesweeperCtx;
 
 MinesweeperCtx* msw_init(int rows, int cols);
+int msw_init_bomb_positions(MinesweeperCtx *game, int first_cell_index);
 
 /**
  * CELL FUNCTIONS

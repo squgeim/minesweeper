@@ -50,6 +50,10 @@ int window_exit() {
 int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
   MinesweeperCell *cell;
 
+  if (!game->is_bombs_initialized) {
+    return ACS_CKBOARD;
+  }
+
   cell = game->cells[y][x];
 
   if (!cell->is_revealed) {
@@ -185,11 +189,17 @@ int window_move_cursor(GameWindow *window, MinesweeperCtx *game, int ch) {
 }
 
 int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
-  int x, y;
+  int x, y, cell_index;
   MinesweeperCell *cell;
 
   x = window->cursor_position_x;
   y = window->cursor_position_y;
+
+  cell_index = y * game->cols + x;
+
+  if (!game->is_bombs_initialized) {
+    msw_init_bomb_positions(game, cell_index);
+  }
 
   cell = game->cells[y][x];
 

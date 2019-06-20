@@ -12,7 +12,12 @@ int random_number(int max) {
   return rand() % max;
 }
 
-void init_bomb_positions(int *bomb_positions, int total_bombs, int total_cells) {
+void init_bomb_positions(
+  int *bomb_positions,
+  int total_bombs,
+  int total_cells,
+  int first_cell_index
+) {
   int i, tmp;
   srand(time(NULL));
 
@@ -83,7 +88,7 @@ void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
 }
 
 int init_cells(MinesweeperCtx *game, int *bomb_positions) {
-  int i, j, k;
+  int i, j, k, index;
   MinesweeperCell *cell, **cell_row;
 
   for (i = 0, k = 0; i < game->rows; i++) {
@@ -98,10 +103,12 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
         return -1;
       }
 
+      index = (i * game->cols) + j;
+
       cell->is_bomb = (bool) array_has_value(
           bomb_positions,
           game->bomb_count,
-          (i * game->cols) + j
+          index
         );
 
       cell->bombs_count = 0;
@@ -109,6 +116,7 @@ int init_cells(MinesweeperCtx *game, int *bomb_positions) {
       cell->is_flagged = false;
       cell->x = j;
       cell->y = i;
+      cell->index = index;
 
       game->cells[i][j] = cell;
     }
@@ -132,26 +140,46 @@ MinesweeperCtx* msw_init(int rows, int cols) {
 
   syslog(LOG_INFO, "Total bombs: %d", total_bombs);
 
-  int *bomb_positions = (int*) malloc(sizeof(int) * total_bombs);
   cells = (MinesweeperCell***) malloc((sizeof(MinesweeperCell **) * rows));
 
-  if (!game || !bomb_positions || !cells) {
+  if (!game || !cells) {
     fprintf(stderr, "There was an error trying to initialize Minesweeper. Maybe\
  you have run out of memory?");
 
     return NULL;
   }
 
-  init_bomb_positions(bomb_positions, total_bombs, total_cells);
-
   game->rows = rows;
   game->cols = cols;
   game->bomb_count = total_bombs;
+  game->is_bombs_initialized = false;
   game->cells = cells;
 
-  init_cells(game, bomb_positions);
-
   return game;
+}
+
+int msw_init_bomb_positions(MinesweeperCtx *game, int first_cell_index) {
+  int *bomb_positions, total_cells;
+
+  bomb_positions = (int*) malloc(sizeof(int) * game->bomb_count);
+  total_cells = game->rows * game->cols;
+
+  if (!bomb_positions) {
+    syslog(LOG_ERR, "Could not initialize game due to insufficient memory.");
+
+    return -1;
+  }
+
+  init_bomb_positions(
+    bomb_positions,
+    game->bomb_count,
+    total_cells,
+    first_cell_index
+  );
+
+  game->is_bombs_initialized = true;
+
+  return init_cells(game, bomb_positions);
 }
 
 int msw_quit(MinesweeperCtx *game) {
