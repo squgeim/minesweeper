@@ -8,6 +8,8 @@
 #include "window.h"
 #include "libminesweeper/minesweeper.h"
 
+int window_disable_cursor(GameWindow *window);
+int window_show_game_over(GameWindow *window);
 int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y);
 
 GameWindow* window_init(int rows, int cols) {
@@ -56,7 +58,7 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
 
   cell = game->cells[y][x];
 
-  if (!cell->is_revealed && game->has_exploded) {
+  if (!cell->is_revealed && !game->has_exploded) {
     if (cell->is_flagged) {
       return '#';
     }
@@ -121,7 +123,12 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
     }
   }
 
-  window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y);
+  if (game->has_exploded) {
+    window_disable_cursor(window);
+    window_show_game_over(window);
+  } else {
+    window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y);
+  }
 
   wrefresh(window->window);
   return 0;
@@ -216,4 +223,14 @@ int window_flag_current_cell(GameWindow *window, MinesweeperCtx *game) {
   cell_flag(game, cell);
 
   return window_draw_game(window, game);
+}
+
+int window_disable_cursor(GameWindow *window) {
+  curs_set(0);
+
+  return 0;
+}
+
+int window_show_game_over(GameWindow *window) {
+  return 0;
 }
