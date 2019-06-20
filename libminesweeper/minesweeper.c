@@ -135,7 +135,7 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   MinesweeperCtx *game = (MinesweeperCtx*) malloc(sizeof(MinesweeperCtx));
 
   total_cells = rows * cols;
-  total_bombs = (int) (0.2 * total_cells); // 20% of the cells have a bomb
+  total_bombs = (int) (BOMBS_RATIO * total_cells); // 15% of the cells have a bomb
 
   syslog(LOG_INFO, "Total bombs: %d", total_bombs);
 
