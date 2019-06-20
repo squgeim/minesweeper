@@ -3,4 +3,6 @@
 
 #define IS_EVEN(n) (n % 2 == 0)
 
+int get_int_from_str(char *str);
+
 #endif

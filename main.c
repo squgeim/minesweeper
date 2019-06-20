@@ -4,6 +4,7 @@
 #include <stdarg.h>
 
 #include "utils/array.h"
+#include "utils/number.h"
 
 #include "window.h"
 #include "libminesweeper/minesweeper.h"
@@ -23,8 +24,14 @@ int main(int argc, char **argv) {
     cols = 32;
   } else {
     // TODO: Limit by available screen space
-    rows = atoi(argv[1]);
-    cols = atoi(argv[2]);
+    rows = get_int_from_str(argv[1]);
+    cols = get_int_from_str(argv[2]);
+
+    if (rows < 0 || cols < 0) {
+      syslog(LOG_ERR, "Invalid rows and colums.");
+
+      return -1;
+    }
   }
 
   syslog(LOG_INFO, "Initializing game with size: %dx%d", cols, rows);
