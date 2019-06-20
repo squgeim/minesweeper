@@ -33,6 +33,11 @@ int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell);
  */
 int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell);
 int cell_flag(MinesweeperCtx *game, MinesweeperCell *cell);
+void get_surrounding_cells(
+  MinesweeperCtx *game,
+  MinesweeperCell *cell,
+  MinesweeperCell **surrounding_cells
+);
 /**
  * CELL FUNCTIONS END
  */

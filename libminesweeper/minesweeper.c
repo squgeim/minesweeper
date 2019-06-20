@@ -16,7 +16,8 @@ void init_bomb_positions(
   int *bomb_positions,
   int total_bombs,
   int total_cells,
-  int first_cell_index
+  int *ignore_cells,
+  int ignore_cells_count
 ) {
   int i, tmp;
   srand(time(NULL));
@@ -24,7 +25,10 @@ void init_bomb_positions(
   i = 0;
   while(1) {
     tmp = random_number(total_cells);
-    if (!array_has_value(bomb_positions, total_bombs, tmp)) {
+    if (
+      !array_has_value(bomb_positions, total_bombs, tmp) &&
+      !array_has_value(ignore_cells, ignore_cells_count, tmp)
+    ) {
       bomb_positions[i] = tmp;
       i++;
     }
@@ -156,7 +160,8 @@ MinesweeperCtx* msw_init(int rows, int cols) {
 }
 
 int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell) {
-  int *bomb_positions, total_cells;
+  int *bomb_positions, total_cells, clear_cells[9], j;
+  MinesweeperCell *surrounding_cells[8];
 
   bomb_positions = (int*) malloc(sizeof(int) * game->bomb_count);
   total_cells = game->rows * game->cols;
@@ -167,11 +172,20 @@ int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell) {
     return -1;
   }
 
+  get_surrounding_cells(game, first_cell, surrounding_cells);
+  for (j = 0; j < 8; j++) {
+    clear_cells[j] = surrounding_cells[j]
+      ? surrounding_cells[j]->index
+      : -1;
+  }
+  clear_cells[j] = first_cell->index;
+
   init_bomb_positions(
     bomb_positions,
     game->bomb_count,
     total_cells,
-    first_cell->index
+    clear_cells,
+    9
   );
 
   init_bomb_counts(game, bomb_positions);
