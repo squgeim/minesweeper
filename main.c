@@ -46,7 +46,7 @@ memory.");
 
   syslog(LOG_INFO, "Exiting because the user asked to.");
 
-  window_exit();
+  window_exit(window);
 
   closelog();
 

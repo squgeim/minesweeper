@@ -42,9 +42,11 @@ GameWindow* window_init(int rows, int cols) {
   return win;
 }
 
-int window_exit() {
+int window_exit(GameWindow *window) {
   refresh();
   endwin();
+
+  free(window);
 
   return 0;
 }

@@ -193,10 +193,21 @@ int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell) {
 
   game->is_bombs_initialized = true;
 
+  free(bomb_positions);
+
   return 0;
 }
 
 int msw_quit(MinesweeperCtx *game) {
+  int i, j;
+
+  for (i = 0; i < game->rows; i++) {
+    for (j = 0; j < game->cols; j++) {
+      free(game->cells[i][j]);
+    }
+    free(game->cells[i]);
+  }
+
   free(game->cells);
   free(game);
 
