@@ -152,6 +152,7 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   game->cols = cols;
   game->bomb_count = total_bombs;
   game->is_bombs_initialized = false;
+  game->has_exploded = false;
   game->cells = cells;
 
   init_cells(game);

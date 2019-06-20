@@ -22,6 +22,7 @@ typedef struct {
   int cols;
   int bomb_count;
   bool is_bombs_initialized;
+  bool has_exploded;
   MinesweeperCell ***cells;
 } MinesweeperCtx;
 

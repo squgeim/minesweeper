@@ -56,7 +56,7 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
 
   cell = game->cells[y][x];
 
-  if (!cell->is_revealed) {
+  if (!cell->is_revealed && game->has_exploded) {
     if (cell->is_flagged) {
       return '#';
     }
