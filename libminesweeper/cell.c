@@ -67,42 +67,37 @@ void get_surrounding_cells(
   MinesweeperCell *cell,
   MinesweeperCell *surrounding_cells[8]
 ) {
-  bool
-    has_left_col = cell->x > 0,
-    has_right_col = cell->x < (game->cols - 1),
-    has_upper_row = cell->y > 0,
-    has_lower_row = cell->y < (game->rows - 1);
   uint8_t i = 0;
 
-  if (has_upper_row) {
-    if (has_left_col) {
-      surrounding_cells[i++] = game->cells[cell->y - 1][cell->x - 1];
+  if (cell->list->up) {
+    if (cell->list->up->list->left) {
+      surrounding_cells[i++] = cell->list->up->list->left;
     }
 
-    surrounding_cells[i++] = game->cells[cell->y - 1][cell->x];
+    surrounding_cells[i++] = cell->list->up;
 
-    if (has_right_col) {
-      surrounding_cells[i++] = game->cells[cell->y - 1][cell->x + 1];
+    if (cell->list->up->list->right) {
+      surrounding_cells[i++] = cell->list->up->list->right;
     }
   }
 
-  if (has_left_col) {
-    surrounding_cells[i++] = game->cells[cell->y][cell->x - 1];
+  if (cell->list->left) {
+    surrounding_cells[i++] = cell->list->left;
   }
 
-  if (has_right_col) {
-    surrounding_cells[i++] = game->cells[cell->y][cell->x + 1];
+  if (cell->list->right) {
+    surrounding_cells[i++] = cell->list->right;
   }
 
-  if (has_lower_row) {
-    if (has_left_col) {
-      surrounding_cells[i++] = game->cells[cell->y + 1][cell->x - 1];
+  if (cell->list->down) {
+    if (cell->list->down->list->left) {
+      surrounding_cells[i++] = cell->list->down->list->left;
     }
 
-    surrounding_cells[i++] = game->cells[cell->y + 1][cell->x];
+    surrounding_cells[i++] = cell->list->down;
 
-    if (has_right_col) {
-      surrounding_cells[i++] = game->cells[cell->y + 1][cell->x + 1];
+    if (cell->list->down->list->right) {
+      surrounding_cells[i++] = cell->list->down->list->right;
     }
   }
 

@@ -95,12 +95,18 @@ int init_cells(MinesweeperCtx *game) {
       if (j > 0) {
         cell->list->left = game->cells[i][j - 1];
         game->cells[i][j - 1]->list->right = cell;
+      } else {
+        cell->list->left = 0;
       }
 
       if (i > 0) {
         cell->list->up = game->cells[i - 1][j];
         game->cells[i - 1][j]->list->down = cell;
+      } else {
+        cell->list->up = 0;
       }
+
+      cell->list->right = cell->list->down = 0;
 
       game->cells[i][j] = cell;
     }
