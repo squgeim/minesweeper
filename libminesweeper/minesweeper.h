@@ -17,7 +17,17 @@ typedef struct {
   bool is_bomb;
   bool is_revealed;
   bool is_flagged;
+  struct __MinesweeperCellList *list;
 } MinesweeperCell;
+
+struct __MinesweeperCellList {
+  MinesweeperCell *up;
+  MinesweeperCell *left;
+  MinesweeperCell *right;
+  MinesweeperCell *down;
+};
+
+typedef struct __MinesweeperCellList MinesweeperCellList;
 
 typedef struct {
   int rows;
@@ -25,6 +35,7 @@ typedef struct {
   int bomb_count;
   bool is_bombs_initialized;
   bool has_exploded;
+  MinesweeperCell *first_cell;
   MinesweeperCell ***cells;
 } MinesweeperCtx;
 

@@ -118,6 +118,21 @@ int init_cells(MinesweeperCtx *game) {
       cell->x = j;
       cell->y = i;
       cell->index = index;
+      cell->list = (MinesweeperCellList *) malloc(sizeof(MinesweeperCellList));
+
+      if (index == 0) {
+        game->first_cell = cell;
+      } else {
+        if (j > 0) {
+          cell->list->left = game->cells[i][j - 1];
+          game->cells[i][j - 1]->list->right = cell;
+        }
+
+        if (i > 0) {
+          cell->list->up = game->cells[i - 1][j];
+          game->cells[i - 1][j]->list->down = cell;
+        }
+      }
 
       game->cells[i][j] = cell;
     }
