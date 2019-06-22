@@ -1,13 +1,18 @@
 CC=gcc
+SRC=src
+
 LFLAGS=-lncurses
-CFLAGS=-g -Wall
-OBJ = window.o libminesweeper/minesweeper.o libminesweeper/cell.o utils/array.o utils/number.o
+DEBUG=-g
+CFLAGS=-Wall
+SOURCE=$(shell find $(SRC) -type f -name '*.c')
 
-build: $(OBJ)
-	$(CC) -o bin/minesweeper main.c $^ $(LFLAGS) $(CFLAGS)
+.PHONY: build clean
 
-%.o : %.c
-	$(CC) -c $(CFLAGS) $< -o $@
+build: $(SOURCE)
+	$(CC) -o bin/minesweeper $^ $(LFLAGS) $(CFLAGS)
+
+%.c :
+	$(CC) $(CFLAGS) $< -o bin/$@
 
 clean:
 	rm *.o
