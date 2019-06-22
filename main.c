@@ -9,7 +9,7 @@
 #include "window.h"
 #include "libminesweeper/minesweeper.h"
 
-int process_character(int ch, GameWindow *window, MinesweeperCtx *game);
+int process_character(int ch, GameWindow *window);
 
 int main(int argc, char **argv) {
   int rows, cols;
@@ -46,10 +46,10 @@ memory.");
     return -1;
   }
 
-  window = window_init(rows, cols);
-  window_draw_game(window, game);
+  window = window_init(game);
+  window_draw_game(window);
 
-  while(process_character(getch(), window, game));
+  while(process_character(getch(), window));
 
   syslog(LOG_INFO, "Exiting because the user asked to.");
 
@@ -60,9 +60,9 @@ memory.");
   return 0;
 }
 
-int process_character(int ch, GameWindow *window, MinesweeperCtx *game) {
+int process_character(int ch, GameWindow *window) {
   if (ch == 'q') {
-    if (msw_quit(game) == 0)
+    if (msw_quit(window->game) == 0)
       return 0;
   }
 
@@ -71,15 +71,15 @@ int process_character(int ch, GameWindow *window, MinesweeperCtx *game) {
     case KEY_RIGHT:
     case KEY_UP:
     case KEY_DOWN:
-      window_move_cursor(window, game, ch);
+      window_move_cursor(window, ch);
 
       break;
     case 10: // Enter key
-      window_reveal_current_cell(window, game);
+      window_reveal_current_cell(window);
 
       break;
     case ' ':
-      window_flag_current_cell(window, game);
+      window_flag_current_cell(window);
 
       break;
   }

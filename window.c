@@ -10,11 +10,13 @@
 
 int window_disable_cursor(GameWindow *window);
 int window_show_game_over(GameWindow *window);
-int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y);
+int window_select_cell(GameWindow *window, int cell_x, int cell_y);
 
-GameWindow* window_init(int rows, int cols) {
+GameWindow* window_init(MinesweeperCtx *game) {
   GameWindow *win;
   WINDOW *local_win;
+  int rows = game->rows,
+      cols = game->cols;
 
   initscr();
   raw();
@@ -25,11 +27,11 @@ GameWindow* window_init(int rows, int cols) {
   refresh();
 
   local_win = newwin(
-      rows * 2 + 1,
-      cols *2 + 1,
-      (LINES - rows * 2 - 1) / 2,
-      (COLS - cols * 2 - 1) / 2
-    );
+    rows * 2 + 1,
+    cols *2 + 1,
+    (LINES - rows * 2 - 1) / 2,
+    (COLS - cols * 2 - 1) / 2
+  );
 
   wrefresh(local_win);
 
@@ -38,6 +40,7 @@ GameWindow* window_init(int rows, int cols) {
   win->cursor_position_x = 0;
   win->cursor_position_y = 0;
   win->window = local_win;
+  win->game = game;
 
   return win;
 }
@@ -79,8 +82,11 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
   return ' ';
 }
 
-int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
+int window_draw_game(GameWindow *window) {
+  MinesweeperCtx *game;
   int i, j, cell_i, cell_j;
+
+  game = window->game;
 
   // Draw top row border:
   mvwaddch(window->window, 0, 0, ACS_ULCORNER);
@@ -129,26 +135,28 @@ int window_draw_game(GameWindow *window, MinesweeperCtx *game) {
     window_disable_cursor(window);
     window_show_game_over(window);
   } else {
-    window_select_cell(window, game, window->cursor_position_x, window->cursor_position_y);
+    window_select_cell(window, window->cursor_position_x, window->cursor_position_y);
   }
 
   wrefresh(window->window);
   return 0;
 }
 
-int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int cell_y) {
+int window_select_cell(GameWindow *window, int cell_x, int cell_y) {
+  int cols = window->game->cols,
+      rows = window->game->rows;
   // TODO: Check invalid cell
 
-  if (cell_x > game->cols - 1) {
+  if (cell_x > cols - 1) {
     cell_x = 0;
   } else if (cell_x < 0) {
-    cell_x = game->cols - 1;
+    cell_x = cols - 1;
   }
 
-  if (cell_y > game->rows - 1) {
+  if (cell_y > rows - 1) {
     cell_y = 0;
   } else if (cell_y < 0) {
-    cell_y = game->rows - 1;
+    cell_y = rows - 1;
   }
 
   int x = cell_x * 2 + 1;
@@ -162,33 +170,29 @@ int window_select_cell(GameWindow *window, MinesweeperCtx *game, int cell_x, int
   return wrefresh(window->window);
 }
 
-int window_move_cursor(GameWindow *window, MinesweeperCtx *game, int ch) {
+int window_move_cursor(GameWindow *window, int ch) {
   switch (ch) {
     case KEY_UP:
       return window_select_cell(
           window,
-          game,
           window->cursor_position_x,
           window->cursor_position_y - 1
         );
     case KEY_DOWN:
       return window_select_cell(
           window,
-          game,
           window->cursor_position_x,
           window->cursor_position_y + 1
         );
     case KEY_LEFT:
       return window_select_cell(
           window,
-          game,
           window->cursor_position_x - 1,
           window->cursor_position_y
         );
     case KEY_RIGHT:
       return window_select_cell(
           window,
-          game,
           window->cursor_position_x + 1,
           window->cursor_position_y
         );
@@ -197,34 +201,37 @@ int window_move_cursor(GameWindow *window, MinesweeperCtx *game, int ch) {
   }
 }
 
-int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
+int window_reveal_current_cell(GameWindow *window) {
   int x, y, cell_index;
+  MinesweeperCtx *game;
   MinesweeperCell *cell;
+
+  game = window->game;
 
   x = window->cursor_position_x;
   y = window->cursor_position_y;
 
-  cell_index = y * game->cols + x;
+  cell_index = INDEX_FOR_CELL(game->rows, game->cols, x, y);
 
   cell = game->cells[y][x];
 
   cell_reveal(cell);
 
-  return window_draw_game(window, game);
+  return window_draw_game(window);
 }
 
-int window_flag_current_cell(GameWindow *window, MinesweeperCtx *game) {
+int window_flag_current_cell(GameWindow *window) {
   int x, y;
   MinesweeperCell *cell;
 
   x = window->cursor_position_x;
   y = window->cursor_position_y;
 
-  cell = game->cells[y][x];
+  cell = window->game->cells[y][x];
 
   cell_flag(cell);
 
-  return window_draw_game(window, game);
+  return window_draw_game(window);
 }
 
 int window_disable_cursor(GameWindow *window) {
