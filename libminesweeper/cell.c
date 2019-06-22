@@ -6,14 +6,17 @@
 #include "minesweeper.h"
 
 
-int explode(MinesweeperCtx *game, MinesweeperCell *cell) {
-  game->has_exploded = true;
+int explode(MinesweeperCell *cell) {
+  cell->game->has_exploded = true;
 
   return 0;
 }
 
-int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell) {
+int cell_reveal(MinesweeperCell *cell) {
+  MinesweeperCtx *game;
   MinesweeperCell *surrounding_cells[8];
+
+  game = cell->game;
 
   if (game->has_exploded) {
     return -1;
@@ -24,13 +27,13 @@ int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell) {
   }
 
   if (cell->is_bomb) {
-    return explode(game, cell);
+    return explode(cell);
   }
 
   cell->is_revealed = true;
 
   if (cell->bombs_count == 0) {
-    get_surrounding_cells(game, cell, surrounding_cells);
+    get_surrounding_cells(cell, surrounding_cells);
 
     for (uint8_t i = 0; i < 8; i++) {
       MinesweeperCell *surrounding_cell = surrounding_cells[i];
@@ -49,21 +52,20 @@ int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell) {
         continue;
       }
 
-      cell_reveal(game, surrounding_cell);
+      cell_reveal(surrounding_cell);
     }
   }
 
   return 0;
 }
 
-int cell_flag(MinesweeperCtx *game, MinesweeperCell *cell) {
+int cell_flag(MinesweeperCell *cell) {
   cell->is_flagged = !cell->is_flagged;
 
   return 0;
 }
 
 void get_surrounding_cells(
-  MinesweeperCtx *game,
   MinesweeperCell *cell,
   MinesweeperCell *surrounding_cells[8]
 ) {

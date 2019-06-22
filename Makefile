@@ -10,4 +10,5 @@ build: $(OBJ)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
+	rm *.o
 	rm **/*.o

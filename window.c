@@ -208,7 +208,7 @@ int window_reveal_current_cell(GameWindow *window, MinesweeperCtx *game) {
 
   cell = game->cells[y][x];
 
-  cell_reveal(game, cell);
+  cell_reveal(cell);
 
   return window_draw_game(window, game);
 }
@@ -222,7 +222,7 @@ int window_flag_current_cell(GameWindow *window, MinesweeperCtx *game) {
 
   cell = game->cells[y][x];
 
-  cell_flag(game, cell);
+  cell_flag(cell);
 
   return window_draw_game(window, game);
 }

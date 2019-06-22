@@ -9,6 +9,7 @@
 
 #define BOMBS_RATIO (0.15) // 15% of all cells
 
+typedef struct __MinesweeperCtx MinesweeperCtx;
 typedef struct __MinesweeperCell MinesweeperCell;
 typedef struct __MinesweeperCellList MinesweeperCellList;
 
@@ -20,6 +21,7 @@ struct __MinesweeperCell {
   bool is_bomb;
   bool is_revealed;
   bool is_flagged;
+  MinesweeperCtx *game;
   MinesweeperCellList *list;
 };
 
@@ -30,7 +32,7 @@ struct __MinesweeperCellList {
   MinesweeperCell *down;
 };
 
-typedef struct {
+struct __MinesweeperCtx {
   int rows;
   int cols;
   int bomb_count;
@@ -38,18 +40,23 @@ typedef struct {
   bool has_exploded;
   MinesweeperCell *first_cell;
   MinesweeperCell ***cells;
-} MinesweeperCtx;
+};
 
+/**
+ * GAME FUNCTIONS
+ */
 MinesweeperCtx* msw_init(int rows, int cols);
 int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell);
+/**
+ * GAME FUNCTIONS END
+ */
 
 /**
  * CELL FUNCTIONS
  */
-int cell_reveal(MinesweeperCtx *game, MinesweeperCell *cell);
-int cell_flag(MinesweeperCtx *game, MinesweeperCell *cell);
+int cell_reveal(MinesweeperCell *cell);
+int cell_flag(MinesweeperCell *cell);
 void get_surrounding_cells(
-  MinesweeperCtx *game,
   MinesweeperCell *cell,
   MinesweeperCell **surrounding_cells
 );

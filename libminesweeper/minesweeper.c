@@ -51,7 +51,7 @@ void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
 
     cell->is_bomb = true;
 
-    get_surrounding_cells(game, cell, surrounding_cells);
+    get_surrounding_cells(cell, surrounding_cells);
 
     for (j = 0; j < 8; j++) {
       if (surrounding_cells[j]) {
@@ -86,6 +86,7 @@ int init_cells(MinesweeperCtx *game) {
       cell->x = j;
       cell->y = i;
       cell->index = index;
+      cell->game = game;
       cell->list = (MinesweeperCellList *) malloc(sizeof(MinesweeperCellList));
 
       if (index == 0) {
@@ -162,7 +163,7 @@ int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell) {
     return -1;
   }
 
-  get_surrounding_cells(game, first_cell, surrounding_cells);
+  get_surrounding_cells(first_cell, surrounding_cells);
   for (j = 0; j < 8; j++) {
     clear_cells[j] = surrounding_cells[j]
       ? surrounding_cells[j]->index
