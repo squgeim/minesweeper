@@ -5,15 +5,20 @@ LFLAGS=-lncurses
 DEBUG=-g
 CFLAGS=-Wall
 SOURCE=$(shell find $(SRC) -type f -name '*.c')
+OBJS=$(SOURCE:.c=.o)
 
-.PHONY: build clean
+.PHONY: build debug clean
 
-build: $(SOURCE)
+build: minesweeper
+
+debug: CFLAGS += $(DEBUG)
+debug: clean build clean
+
+minesweeper: $(OBJS)
 	$(CC) -o bin/minesweeper $^ $(LFLAGS) $(CFLAGS)
 
-%.c :
-	$(CC) $(CFLAGS) $< -o bin/$@
+%.o : %.c
+	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-	rm *.o
-	rm **/*.o
+	@rm -r src/**/*.o
