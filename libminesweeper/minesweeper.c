@@ -40,7 +40,7 @@ void init_bomb_positions(
 }
 
 void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
-  int i;
+  int i, j;
   MinesweeperCell *cell, *surrounding_cells[8];
 
   for (i = 0; i < game->bomb_count; i++) {
@@ -53,19 +53,19 @@ void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
 
     get_surrounding_cells(game, cell, surrounding_cells);
 
-    for (i = 0; i < 8; i++) {
-      if (surrounding_cells[i]) {
-        surrounding_cells[i]->bombs_count++;
+    for (j = 0; j < 8; j++) {
+      if (surrounding_cells[j]) {
+        surrounding_cells[j]->bombs_count++;
       }
     }
   }
 }
 
 int init_cells(MinesweeperCtx *game) {
-  int i, j, k, index;
+  int i, j, index;
   MinesweeperCell *cell, **cell_row;
 
-  for (i = 0, k = 0; i < game->rows; i++) {
+  for (i = 0; i < game->rows; i++) {
     cell_row =
       (MinesweeperCell **) malloc(sizeof(MinesweeperCell*) * game->cols);
     game->cells[i] = cell_row;
@@ -90,16 +90,16 @@ int init_cells(MinesweeperCtx *game) {
 
       if (index == 0) {
         game->first_cell = cell;
-      } else {
-        if (j > 0) {
-          cell->list->left = game->cells[i][j - 1];
-          game->cells[i][j - 1]->list->right = cell;
-        }
+      }
 
-        if (i > 0) {
-          cell->list->up = game->cells[i - 1][j];
-          game->cells[i - 1][j]->list->down = cell;
-        }
+      if (j > 0) {
+        cell->list->left = game->cells[i][j - 1];
+        game->cells[i][j - 1]->list->right = cell;
+      }
+
+      if (i > 0) {
+        cell->list->up = game->cells[i - 1][j];
+        game->cells[i - 1][j]->list->down = cell;
       }
 
       game->cells[i][j] = cell;

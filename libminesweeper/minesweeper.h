@@ -9,7 +9,10 @@
 
 #define BOMBS_RATIO (0.15) // 15% of all cells
 
-typedef struct {
+typedef struct __MinesweeperCell MinesweeperCell;
+typedef struct __MinesweeperCellList MinesweeperCellList;
+
+struct __MinesweeperCell {
   int x;
   int y;
   int index;
@@ -17,8 +20,8 @@ typedef struct {
   bool is_bomb;
   bool is_revealed;
   bool is_flagged;
-  struct __MinesweeperCellList *list;
-} MinesweeperCell;
+  MinesweeperCellList *list;
+};
 
 struct __MinesweeperCellList {
   MinesweeperCell *up;
@@ -26,8 +29,6 @@ struct __MinesweeperCellList {
   MinesweeperCell *right;
   MinesweeperCell *down;
 };
-
-typedef struct __MinesweeperCellList MinesweeperCellList;
 
 typedef struct {
   int rows;
