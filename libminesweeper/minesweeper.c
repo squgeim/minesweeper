@@ -8,17 +8,15 @@
 
 #include "minesweeper.h"
 
-int random_number(int max) {
+int random_number(int max)
+{
   return rand() % max;
 }
 
-void init_bomb_positions(
-  int *bomb_positions,
-  int total_bombs,
-  int total_cells,
-  int *ignore_cells,
-  int ignore_cells_count
-) {
+void init_bomb_positions(int *bomb_positions, int total_bombs,
+                         int total_cells, int *ignore_cells,
+                         int ignore_cells_count)
+{
   int i, tmp;
   srand(time(NULL));
 
@@ -39,7 +37,8 @@ void init_bomb_positions(
   }
 }
 
-void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
+void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions)
+{
   int i, j;
   MinesweeperCell *cell, *surrounding_cells[8];
 
@@ -61,7 +60,8 @@ void init_bomb_counts(MinesweeperCtx *game, int *bomb_positions) {
   }
 }
 
-int init_cells(MinesweeperCtx *game) {
+int init_cells(MinesweeperCtx *game)
+{
   int i, j, index;
   MinesweeperCell *cell, **cell_row;
 
@@ -116,7 +116,8 @@ int init_cells(MinesweeperCtx *game) {
   return 0;
 }
 
-MinesweeperCtx* msw_init(int rows, int cols) {
+MinesweeperCtx* msw_init(int rows, int cols)
+{
   int total_cells, total_bombs;
   MinesweeperCell ***cells;
 
@@ -150,7 +151,8 @@ MinesweeperCtx* msw_init(int rows, int cols) {
   return game;
 }
 
-int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell) {
+int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell)
+{
   int *bomb_positions, total_cells, clear_cells[9], j;
   MinesweeperCell *surrounding_cells[8];
 
@@ -188,7 +190,8 @@ int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell) {
   return 0;
 }
 
-int msw_quit(MinesweeperCtx *game) {
+int msw_quit(MinesweeperCtx *game)
+{
   int i, j;
 
   for (i = 0; i < game->rows; i++) {

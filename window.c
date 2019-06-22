@@ -12,7 +12,8 @@ int window_disable_cursor(GameWindow *window);
 int window_show_game_over(GameWindow *window);
 int window_select_cell(GameWindow *window, int cell_x, int cell_y);
 
-GameWindow* window_init(MinesweeperCtx *game) {
+GameWindow* window_init(MinesweeperCtx *game)
+{
   GameWindow *win;
   WINDOW *local_win;
   int rows = game->rows,
@@ -45,7 +46,8 @@ GameWindow* window_init(MinesweeperCtx *game) {
   return win;
 }
 
-int window_exit(GameWindow *window) {
+int window_exit(GameWindow *window)
+{
   refresh();
   endwin();
 
@@ -54,7 +56,8 @@ int window_exit(GameWindow *window) {
   return 0;
 }
 
-int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
+int get_value_for_cell(MinesweeperCtx *game, int y, int x)
+{
   MinesweeperCell *cell;
 
   if (!game->is_bombs_initialized) {
@@ -82,7 +85,8 @@ int get_value_for_cell(MinesweeperCtx *game, int y, int x) {
   return ' ';
 }
 
-int window_draw_game(GameWindow *window) {
+int window_draw_game(GameWindow *window)
+{
   MinesweeperCtx *game;
   int i, j, cell_i, cell_j;
 
@@ -135,14 +139,19 @@ int window_draw_game(GameWindow *window) {
     window_disable_cursor(window);
     window_show_game_over(window);
   } else {
-    window_select_cell(window, window->cursor_position_x, window->cursor_position_y);
+    window_select_cell(
+        window,
+        window->cursor_position_x,
+        window->cursor_position_y
+    );
   }
 
   wrefresh(window->window);
   return 0;
 }
 
-int window_select_cell(GameWindow *window, int cell_x, int cell_y) {
+int window_select_cell(GameWindow *window, int cell_x, int cell_y)
+{
   int cols = window->game->cols,
       rows = window->game->rows;
   // TODO: Check invalid cell
@@ -170,7 +179,8 @@ int window_select_cell(GameWindow *window, int cell_x, int cell_y) {
   return wrefresh(window->window);
 }
 
-int window_move_cursor(GameWindow *window, int ch) {
+int window_move_cursor(GameWindow *window, int ch)
+{
   switch (ch) {
     case KEY_UP:
       return window_select_cell(
@@ -201,7 +211,8 @@ int window_move_cursor(GameWindow *window, int ch) {
   }
 }
 
-int window_reveal_current_cell(GameWindow *window) {
+int window_reveal_current_cell(GameWindow *window)
+{
   int x, y, cell_index;
   MinesweeperCtx *game;
   MinesweeperCell *cell;
@@ -220,7 +231,8 @@ int window_reveal_current_cell(GameWindow *window) {
   return window_draw_game(window);
 }
 
-int window_flag_current_cell(GameWindow *window) {
+int window_flag_current_cell(GameWindow *window)
+{
   int x, y;
   MinesweeperCell *cell;
 
@@ -234,12 +246,14 @@ int window_flag_current_cell(GameWindow *window) {
   return window_draw_game(window);
 }
 
-int window_disable_cursor(GameWindow *window) {
+int window_disable_cursor(GameWindow *window)
+{
   curs_set(0);
 
   return 0;
 }
 
-int window_show_game_over(GameWindow *window) {
+int window_show_game_over(GameWindow *window)
+{
   return 0;
 }

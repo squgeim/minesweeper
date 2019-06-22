@@ -11,7 +11,8 @@
 
 int process_character(int ch, GameWindow *window);
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   int rows, cols;
   MinesweeperCtx *game;
   GameWindow *window;
@@ -39,8 +40,9 @@ int main(int argc, char **argv) {
   game = msw_init(rows, cols);
 
   if (!game) {
-    syslog(LOG_ERR, "Could not initialize game, most probably due to lack of \
-memory.");
+    syslog(LOG_ERR,
+           "Could not initialize game, most probably due to lack of memory."
+          );
     fprintf(stderr, "Could not initialize game.");
 
     return -1;
@@ -60,28 +62,29 @@ memory.");
   return 0;
 }
 
-int process_character(int ch, GameWindow *window) {
+int process_character(int ch, GameWindow *window)
+{
   if (ch == 'q') {
     if (msw_quit(window->game) == 0)
       return 0;
   }
 
   switch (ch) {
-    case KEY_LEFT:
-    case KEY_RIGHT:
-    case KEY_UP:
-    case KEY_DOWN:
-      window_move_cursor(window, ch);
+  case KEY_LEFT:
+  case KEY_RIGHT:
+  case KEY_UP:
+  case KEY_DOWN:
+    window_move_cursor(window, ch);
 
-      break;
-    case 10: // Enter key
-      window_reveal_current_cell(window);
+    break;
+  case 10: // Enter key
+    window_reveal_current_cell(window);
 
-      break;
-    case ' ':
-      window_flag_current_cell(window);
+    break;
+  case ' ':
+    window_flag_current_cell(window);
 
-      break;
+    break;
   }
 
   return 1;

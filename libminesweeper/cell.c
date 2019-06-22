@@ -5,14 +5,15 @@
 
 #include "minesweeper.h"
 
-
-int explode(MinesweeperCell *cell) {
+int explode(MinesweeperCell *cell)
+{
   cell->game->has_exploded = true;
 
   return 0;
 }
 
-int cell_reveal(MinesweeperCell *cell) {
+int cell_reveal(MinesweeperCell *cell)
+{
   MinesweeperCtx *game;
   MinesweeperCell *surrounding_cells[8];
 
@@ -59,16 +60,16 @@ int cell_reveal(MinesweeperCell *cell) {
   return 0;
 }
 
-int cell_flag(MinesweeperCell *cell) {
+int cell_flag(MinesweeperCell *cell)
+{
   cell->is_flagged = !cell->is_flagged;
 
   return 0;
 }
 
-void get_surrounding_cells(
-  MinesweeperCell *cell,
-  MinesweeperCell *surrounding_cells[8]
-) {
+void get_surrounding_cells(MinesweeperCell *cell,
+                           MinesweeperCell *surrounding_cells[8])
+{
   uint8_t i = 0;
 
   if (cell->list->up) {
