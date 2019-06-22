@@ -192,6 +192,7 @@ int msw_quit(MinesweeperCtx *game) {
 
   for (i = 0; i < game->rows; i++) {
     for (j = 0; j < game->cols; j++) {
+      free(game->cells[i][j]->list);
       free(game->cells[i][j]);
     }
     free(game->cells[i]);
