@@ -5,10 +5,10 @@
 #include "libminesweeper/minesweeper.h"
 
 typedef struct {
-  WINDOW* window;
-  MinesweeperCtx *game;
-  int cursor_position_x;
-  int cursor_position_y;
+    WINDOW *window;
+    MinesweeperCtx *game;
+    int cursor_position_x;
+    int cursor_position_y;
 } GameWindow;
 
 GameWindow* window_init(MinesweeperCtx *game);
