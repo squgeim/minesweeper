@@ -202,3 +202,22 @@ int msw_quit(MinesweeperCtx *game)
 
     return 0;
 }
+
+bool msw_is_game_over(MinesweeperCtx *game) {
+    uint8_t i, j;
+    MinesweeperCell *cur;
+
+    if (game->has_exploded)
+        return true;
+
+    // Check if all the bombs have been flagged
+    for (i = 0; i < game->rows; i++) {
+        for (j = 0; j < game->cols; j++) {
+            cur = game->cells[i][j];
+            if (!cur->is_bomb && !cur->is_revealed)
+                return false;
+        }
+    }
+
+    return true;
+}

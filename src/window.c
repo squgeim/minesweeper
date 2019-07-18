@@ -126,7 +126,7 @@ int window_draw_game(GameWindow *window)
             cell_i++;
     }
 
-    if (game->has_exploded) {
+    if (msw_is_game_over(game)) {
         window_disable_cursor(window);
         window_show_game_over(window);
     } else {
@@ -241,5 +241,15 @@ int window_disable_cursor(GameWindow *window)
 
 int window_show_game_over(GameWindow *window)
 {
+    if (!msw_is_game_over(window->game)) {
+        return -1;
+    }
+
+    if (window->game->has_exploded) {
+        mvprintw(0, 0, "BETTER LUCK NEXT TIME!");
+    } else {
+        mvprintw(0, 0, "CONGRATULATIONS!");
+    }
+
     return 0;
 }

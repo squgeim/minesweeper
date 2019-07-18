@@ -47,6 +47,7 @@ struct __MinesweeperCtx {
  */
 MinesweeperCtx *msw_init(int rows, int cols);
 int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell);
+bool msw_is_game_over(MinesweeperCtx *game);
 /**
  * GAME FUNCTIONS END
  */
