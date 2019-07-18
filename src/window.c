@@ -12,7 +12,8 @@ int window_disable_cursor(GameWindow *window);
 int window_show_game_over(GameWindow *window);
 int window_select_cell(GameWindow *window, int cell_x, int cell_y);
 
-GameWindow *window_init(MinesweeperCtx *game) {
+GameWindow *window_init(MinesweeperCtx *game)
+{
     GameWindow *win;
     WINDOW *local_win;
     int rows = game->rows,
@@ -26,11 +27,10 @@ GameWindow *window_init(MinesweeperCtx *game) {
 
     refresh();
 
-    local_win = newwin(
-        rows * 2 + 1,
-        cols * 2 + 1,
-        (LINES - rows * 2 - 1) / 2,
-        (COLS - cols * 2 - 1) / 2);
+    local_win = newwin(rows * 2 + 1,
+                       cols * 2 + 1,
+                       (LINES - rows * 2 - 1) / 2,
+                       (COLS - cols * 2 - 1) / 2);
 
     wrefresh(local_win);
 
@@ -94,21 +94,25 @@ int window_draw_game(GameWindow *window)
 
     // Draw bottom row border:
     mvwaddch(window->window, game->rows * 2, 0, ACS_LLCORNER);
-    for (j = 1; j < game->cols * 2; j++)
-        mvwaddch(window->window, game->rows * 2, j, IS_EVEN(j) ? ACS_BTEE : ACS_HLINE);
+    for (j = 1; j < game->cols * 2; j++) {
+        mvwaddch(window->window, game->rows * 2, j,
+                 IS_EVEN(j) ? ACS_BTEE : ACS_HLINE);
+    }
     mvwaddch(window->window, game->rows * 2, j, ACS_LRCORNER);
 
     // Draw side borders:
     for (i = 1; i < game->rows * 2; i++) {
         mvwaddch(window->window, i, 0, IS_EVEN(i) ? ACS_LTEE : ACS_VLINE);
-        mvwaddch(window->window, i, game->cols * 2, IS_EVEN(i) ? ACS_RTEE : ACS_VLINE);
+        mvwaddch(window->window, i, game->cols * 2,
+                 IS_EVEN(i) ? ACS_RTEE : ACS_VLINE);
     }
 
     // Draw cells and grid:
     for (i = 1, cell_i = 0; i < game->rows * 2; i++) {
         for (j = 1, cell_j = 0; j < game->cols * 2; j++) {
             if (IS_EVEN(i)) {
-                mvwaddch(window->window, i, j, IS_EVEN(j) ? ACS_PLUS : ACS_HLINE);
+                mvwaddch(window->window, i, j,
+                         IS_EVEN(j) ? ACS_PLUS : ACS_HLINE);
 
                 continue;
             }
@@ -119,7 +123,8 @@ int window_draw_game(GameWindow *window)
                 continue;
             }
 
-            mvwaddch(window->window, i, j, get_value_for_cell(game, cell_i, cell_j++));
+            mvwaddch(window->window, i, j,
+                     get_value_for_cell(game, cell_i, cell_j++));
         }
 
         if (!IS_EVEN(i))
@@ -130,10 +135,9 @@ int window_draw_game(GameWindow *window)
         window_disable_cursor(window);
         window_show_game_over(window);
     } else {
-        window_select_cell(
-            window,
-            window->cursor_position_x,
-            window->cursor_position_y);
+        window_select_cell(window,
+                           window->cursor_position_x,
+                           window->cursor_position_y);
     }
 
     wrefresh(window->window);
@@ -241,9 +245,8 @@ int window_disable_cursor(GameWindow *window)
 
 int window_show_game_over(GameWindow *window)
 {
-    if (!msw_is_game_over(window->game)) {
+    if (!msw_is_game_over(window->game))
         return -1;
-    }
 
     if (window->game->has_exploded) {
         mvprintw(0, 0, "BETTER LUCK NEXT TIME!");
