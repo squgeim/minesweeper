@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <syslog.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #include "../utils/array.h"
 
