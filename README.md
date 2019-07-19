@@ -1,4 +1,4 @@
-# minesweeper
+# minesweeper [![Build Status](https://travis-ci.com/squgeim/minesweeper.svg?branch=master)](https://travis-ci.com/squgeim/minesweeper)
 
 A simple implementation of the classic Minesweeper in your terminal.
 
