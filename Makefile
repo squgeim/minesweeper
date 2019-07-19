@@ -3,7 +3,7 @@ SRC=src
 
 LFLAGS=-lncurses
 DEBUG=-g
-CFLAGS=-Wall
+CFLAGS=-Wall -std=c99
 SOURCE=$(shell find $(SRC) -type f -name '*.c')
 OBJS=$(SOURCE:.c=.o)
 
