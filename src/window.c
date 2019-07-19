@@ -203,7 +203,7 @@ int window_move_cursor(GameWindow *window, int ch)
 
 int window_reveal_current_cell(GameWindow *window)
 {
-    int x, y, cell_index;
+    int x, y;
     MinesweeperCtx *game;
     MinesweeperCell *cell;
 
@@ -211,8 +211,6 @@ int window_reveal_current_cell(GameWindow *window)
 
     x = window->cursor_position_x;
     y = window->cursor_position_y;
-
-    cell_index = INDEX_FOR_CELL(game->rows, game->cols, x, y);
 
     cell = game->cells[y][x];
 
