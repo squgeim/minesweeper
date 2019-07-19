@@ -11,7 +11,7 @@ typedef struct {
     int cursor_position_y;
 } GameWindow;
 
-GameWindow* window_init(MinesweeperCtx *game);
+int window_init(GameWindow *window, MinesweeperCtx *game);
 int window_exit(GameWindow *window);
 
 int window_draw_game(GameWindow *window);

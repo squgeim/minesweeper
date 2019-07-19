@@ -14,8 +14,8 @@ int process_character(int ch, GameWindow *window);
 int main(int argc, char **argv)
 {
   int rows, cols;
-  MinesweeperCtx *game;
-  GameWindow *window;
+  MinesweeperCtx game = {};
+  GameWindow window = {};
 
   openlog("minesweeper", (LOG_CONS | LOG_PERROR | LOG_PID), LOG_USER);
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     cols = get_int_from_str(argv[2]);
 
     if (rows < 0 || cols < 0) {
-      syslog(LOG_ERR, "Invalid rows and colums.");
+      syslog(LOG_ERR, "Invalid rows and columns.");
 
       return -1;
     }
@@ -37,25 +37,15 @@ int main(int argc, char **argv)
 
   syslog(LOG_INFO, "Initializing game with size: %dx%d", cols, rows);
 
-  game = msw_init(rows, cols);
+  msw_init(&game, rows, cols);
+  window_init(&window, &game);
+  window_draw_game(&window);
 
-  if (!game) {
-    syslog(LOG_ERR,
-           "Could not initialize game, most probably due to lack of memory."
-          );
-    fprintf(stderr, "Could not initialize game.");
-
-    return -1;
-  }
-
-  window = window_init(game);
-  window_draw_game(window);
-
-  while(process_character(getch(), window));
+  while(process_character(getch(), &window));
 
   syslog(LOG_INFO, "Exiting because the user asked to.");
 
-  window_exit(window);
+  window_exit(&window);
 
   closelog();
 

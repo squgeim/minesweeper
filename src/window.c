@@ -12,9 +12,8 @@ int window_disable_cursor(GameWindow *window);
 int window_show_game_over(GameWindow *window);
 int window_select_cell(GameWindow *window, int cell_x, int cell_y);
 
-GameWindow *window_init(MinesweeperCtx *game)
+int window_init(GameWindow *win, MinesweeperCtx *game)
 {
-    GameWindow *win;
     WINDOW *local_win;
     int rows = game->rows,
         cols = game->cols;
@@ -34,22 +33,18 @@ GameWindow *window_init(MinesweeperCtx *game)
 
     wrefresh(local_win);
 
-    win = (GameWindow *)malloc(sizeof(GameWindow));
-
     win->cursor_position_x = 0;
     win->cursor_position_y = 0;
     win->window = local_win;
     win->game = game;
 
-    return win;
+    return 0;
 }
 
 int window_exit(GameWindow *window)
 {
     refresh();
     endwin();
-
-    free(window);
 
     return 0;
 }

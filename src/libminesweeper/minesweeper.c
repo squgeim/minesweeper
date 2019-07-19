@@ -112,14 +112,12 @@ int init_cells(MinesweeperCtx *game)
     return 0;
 }
 
-MinesweeperCtx *msw_init(int rows, int cols)
+int msw_init(MinesweeperCtx *game, int rows, int cols)
 {
     int total_cells, total_bombs;
     MinesweeperCell ***cells;
 
     syslog(LOG_INFO, "Initializing game with size: %dx%d", cols, rows);
-
-    MinesweeperCtx *game = (MinesweeperCtx *)malloc(sizeof(MinesweeperCtx));
 
     total_cells = rows * cols;
     total_bombs = (int)(BOMBS_RATIO * total_cells); // 15% of the cells have a bomb
@@ -128,11 +126,11 @@ MinesweeperCtx *msw_init(int rows, int cols)
 
     cells = (MinesweeperCell ***)malloc((sizeof(MinesweeperCell **) * rows));
 
-    if (!game || !cells) {
+    if (!cells) {
         fprintf(stderr, "There was an error trying to initialize Minesweeper. Maybe\
  you have run out of memory?");
 
-        return NULL;
+        return -1;
     }
 
     game->rows = rows;
@@ -144,7 +142,7 @@ MinesweeperCtx *msw_init(int rows, int cols)
 
     init_cells(game);
 
-    return game;
+    return 0;
 }
 
 int msw_init_bomb_positions(MinesweeperCtx *game, MinesweeperCell *first_cell)
@@ -198,7 +196,6 @@ int msw_quit(MinesweeperCtx *game)
     }
 
     free(game->cells);
-    free(game);
 
     return 0;
 }
