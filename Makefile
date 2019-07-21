@@ -21,4 +21,4 @@ minesweeper: $(OBJS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-	@rm -r src/**/*.o bin/minesweeper
+	@rm -f src/*.o src/**/*.o bin/minesweeper
