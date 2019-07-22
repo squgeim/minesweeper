@@ -22,7 +22,7 @@ minesweeper: $(OBJS)
 	$(CC) -o bin/minesweeper $^ $(LFLAGS) $(CFLAGS)
 
 minesweeper_test: $(TESTS_OBJS)
-	@$(CC) -o bin/test $^ $(LFLAGS) $(CFLAGS)
+	$(CC) -o bin/test $^ $(LFLAGS) $(CFLAGS)
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
