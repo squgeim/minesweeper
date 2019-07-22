@@ -1,3 +1,7 @@
 language: c
-script: make
-compiler: gcc
+compiler:
+  - gcc
+
+script:
+  - make clean build
+  - make test && ./bin/test
